@@ -17,3 +17,21 @@ and if your values are allowed you will get:
   "deny": []
 }
 ```
+if you have "name": other value
+```
+"test_role": [
+              {
+              ...
+                "name": "test_role" 
+              }
+```
+so you will get:
+```
+...
+  "deny": [
+    "Name other_value not allowed."
+  ]
+}
+```
+
+            
