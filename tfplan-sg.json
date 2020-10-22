@@ -1,0 +1,111 @@
+{
+    "provider": [
+      {
+        "aws": [
+          {
+            "region": "ca-central-1"
+          }
+        ]
+      }
+    ],
+    "resource": [
+      {
+        "aws_vpc": [
+          {
+            "vpc": [
+              {
+                "cidr_block": "10.0.0.0/16"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "aws_subnet": [
+          {
+            "test_subnet": [
+              {
+                "availability_zone": "ca-central-1b",
+                "cidr_block": "10.0.1.0/24",
+                "vpc_id": "${aws_vpc.vpc.id}"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "aws_security_group": [
+          {
+            "ssh_from_office": [
+              {
+                "description": "Allow ssh from office",
+                "egress": [
+                  {
+                    "cidr_blocks": [
+                      "0.0.0.0/0"
+                    ],
+                    "from_port": 0,
+                    "protocol": "-1",
+                    "to_port": 0
+                  }
+                ],
+                "ingress": [
+                  {
+                    "cidr_blocks": [
+                      "0.0.0.0/0"
+                    ],
+                    "from_port": 22,
+                    "protocol": "tcp",
+                    "to_port": 22
+                  }
+                ],
+                "name": "ssh_from_office",
+                "vpc_id": "${aws_vpc.vpc.id}"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "aws_security_group": [
+          {
+            "http_https_from_office": [
+              {
+                "description": "Allow http and https from office",
+                "egress": [
+                  {
+                    "cidr_blocks": [
+                      "0.0.0.0/0"
+                    ],
+                    "from_port": 0,
+                    "protocol": "-1",
+                    "to_port": 0
+                  }
+                ],
+                "ingress": [
+                  {
+                    "cidr_blocks": [
+                      "127.0.0.1/32"
+                    ],
+                    "from_port": 80,
+                    "protocol": "tcp",
+                    "to_port": 80
+                  },
+                  {
+                    "cidr_blocks": [
+                      "127.0.0.1/32"
+                    ],
+                    "from_port": 443,
+                    "protocol": "tcp",
+                    "to_port": 443
+                  }
+                ],
+                "name": "http_https_from_office-",
+                "vpc_id": "${aws_vpc.vpc.id}"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
