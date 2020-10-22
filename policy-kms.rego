@@ -7,24 +7,11 @@ array_contains(arr, elem) {
   arr[_] = elem
 }
 
-allowed_actions = [
-  "kms:*",
-]
- 
-# deny[reason] {
-#   r := tfplan.resource[_]
-#   role := r.aws_iam_role[_]
-#   testrole := role.test_role[_]
-#   policy := testrole.assume_role_policy.Statement[_]
-#   key := policy.Action[_]
-#   action := key[_]
-#   not array_contains(allowed_actions, action)
-#   reason := sprintf("Action kms %s not allowed.", [action])
-# }
+denied_action = "kms:*"
 
 deny[reason] {
-  r := tfplan.resource[_].aws_iam_role[_].test_role[_].assume_role_policy.Statement[_].Action[_]
-  not array_contains(allowed_actions, r)
+  r := tfplan.resource[_].aws_iam_role[_].test_role[_].assume_role_policy.Statement[_].Action
+  array_contains(r, denied_action)
   reason := sprintf("Action kms %s not allowed.", [r])
 }
 
