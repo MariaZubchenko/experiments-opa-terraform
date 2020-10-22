@@ -50,5 +50,38 @@ so you will get:
   ]
 }
 ```
+## To check security groups:
+`$ opa eval --format pretty --data policy-sg.rego --input tfplan-sg.json "data.terraform"`
 
+and if your values are allowed you will get:
+```
+{
+  "denied_action": "0.0.0.0/0",
+  "deny": []
+}
+```
+If you have:
+```
+...
+"ingress": [
+                  {
+                    "cidr_blocks": [
+                      "0.0.0.0/0"
+                    ],
+                    "from_port": 22,
+                    "protocol": "tcp",
+                    "to_port": 22
+                  }
+                ],
+...                
+```       
+so you will get:
+```
+{
+  "denied_action": "0.0.0.0/0",
+  "deny": [
+    "Cidr block with [\"0.0.0.0/0\"] from port 22 not allowed."
+  ]
+}
+```
             
