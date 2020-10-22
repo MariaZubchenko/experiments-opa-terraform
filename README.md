@@ -2,18 +2,16 @@
 Experiments with Open Policy Agent and Terraform 
 
 ## To check policy kms:
-`$ opa eval --format pretty --data policy-kms.rego --input tfplankms.json "data.terraform"`
+`$ opa eval --format pretty --data policy-kms.rego --input tfplan-kms.json "data.terraform"`
 
 and if your values are allowed you will get:
 
 ```
 {
-  "allowed_actions": [
-    "kms:*"
-  ],
   "allowed_name": [
     "test_role"
   ],
+  "denied_action": "kms:*",
   "deny": []
 }
 ```
@@ -29,7 +27,16 @@ so you will get:
 ```
 ...
   "deny": [
-    "Name other_value not allowed."
+    "Name other not allowed."
+  ]
+}
+```
+
+if you have "Action": "kms:*"
+```
+...
+  "deny": [
+    "Action kms [\"kms:*\"] not allowed."
   ]
 }
 ```
