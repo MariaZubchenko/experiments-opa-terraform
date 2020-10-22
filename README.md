@@ -17,11 +17,13 @@ and if your values are allowed you will get:
 ```
 if you have "name": other value
 ```
+...
 "test_role": [
               {
               ...
                 "name": "test_role" 
               }
+...              
 ```
 so you will get:
 ```
@@ -33,6 +35,14 @@ so you will get:
 ```
 
 if you have "Action": "kms:*"
+```
+...
+ {
+                                            "Action": ["kms:*"],      
+                                            "Effect": "Allow",   
+...
+```
+so you will get:
 ```
 ...
   "deny": [
