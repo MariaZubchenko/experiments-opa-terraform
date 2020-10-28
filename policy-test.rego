@@ -19,6 +19,12 @@ iam_policy[p] {
     p.type == "aws_iam_role_policy"
 }
 
+# cidr_blocks - !it works!
+cidr_blocks[c] {
+    c := input.resource_changes[_]
+    c.type == "aws_security_group"
+}
+
 # Rule to restrict S3 bucket ACLs
 deny_acl[reason] {
     r := s3_buckets[_]
@@ -51,12 +57,14 @@ deny[reason] {
         )
 }
 
-# Rule to deny opened ports
+# Rule to deny opened ports - !it works!
 denied_cidr := "10.5.0.0/16"
 deny_cidr[reason] {
-  res := input.planned_values.root_module.child_modules[_].resources[_].values.ingress[_].cidr_blocks #.values.ingress[_].cidr_blocks[_]
-  array_contains(res, denied_cidr)
-  reason := sprintf("Cidr block %v not allowed.", [res])
+    c := cidr_blocks[_]
+    array_contains(c.change.after.ingress[_].cidr_blocks, denied_cidr)
+    reason := sprintf(
+        "Cidr blocks %s not allowed in %v.", 
+        [c.change.after.ingress[_].cidr_blocks, c.change.after.name])
 }
 
 denied_action := "s3:*"
