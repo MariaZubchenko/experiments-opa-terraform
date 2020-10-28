@@ -59,7 +59,7 @@ deny_cidr[reason] {
   reason := sprintf("Cidr block %v not allowed.", [res])
 }
 
-denied_action = "s3:*"
+denied_action := "s3:*"
 # denied_action2 = "iam:*"
 # denied_resource = "arn:aws:kms:*"
 
