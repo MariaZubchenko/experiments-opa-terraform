@@ -15,24 +15,32 @@ s3_buckets[r] {
     r.type == "aws_s3_bucket"
 }
 
-tags[t] {
-    t := input.resource_changes[_].change.after.tags
-    t.ContainsPCIData == "false"
-    t.ContainsPHIData == "false"
-    t.ContainsPIIData == "false"
-}
+#tags[t] {
+#    t := input.resource_changes[_].change.after.tags
+#    t.ContainsPCIData == "false"
+#    t.ContainsPHIData == "false"
+#    t.ContainsPIIData == "false"
+#}
 
 sse_encryption[e] {
-    e := input.resource_changes[_].change.after.server_side_encryption_configuration[_]
+    e := input.resource_changes[_].change.after.server_side_encryption_configuration[_].rule[_].apply_server_side_encryption_by_default
+}
+
+deny_key[reason] {
+    e := sse_encryption[_]
+    array_contains(e.rule[_].apply_server_side_encryption_by_default[_].kms_master_key_id, denied_kms_master_key_id) 
+    reason := sprintf(
+        "Denied to use %s kms master key.",
+        [e.kms_master_key_id]
+    )
 }
 
 deny_sse[reason] {
     e := sse_encryption[_]
-    not tags[_],
-    array_contains(e.rule[_].apply_server_side_encryption_by_default[_].kms_master_key_id, denied_kms_master_key_id) 
+    not array_contains(allowed_AES256_kms_master_key_id, e.sse_algorithm) 
     reason := sprintf(
-        "Denied to use %s kms master key.",
-        [e.rule[_].apply_server_side_encryption_by_default[_].kms_master_key_id]
+        "Denied to use %s sse algorithm.",
+        [e.sse_algorithm]
     )
 }
 
