@@ -44,20 +44,30 @@ deny_sse[reason] {
     )
 }
 
-# It doesn't work, I don't know how to get the Action out of the policy. I will think about it.
+# Part with iam policies works as it should
 iam_policy[p] {
     p := input.resource_changes[_]
     p.type == "aws_iam_role_policy"
 }
 
-denied_action := "s3:*"
-deny [reason] {
-    p := iam_policy[_].change.after.policy
-    p.policy == ""
-    array_contains(p.change.after.policy, denied_action)
+denied_policy_kms_action_regex := ".*kms:*"
+
+deny_policy_kms [reason] {
+    p := iam_policy[_]
+    regex.match(denied_policy_kms_action_regex, p.change.after.policy)
     reason := sprintf(
-        "Action %s not allowed.", 
-        [p.change.after.policy])
+        "Policy %s not allowed.", 
+        [p.change.after.name])
+}
+
+denied_policy_iam_action_regex := ".*iam:*"
+
+deny_policy_iam [reason] {
+    p := iam_policy[_]
+    regex.match(denied_policy_iam_action_regex, p.change.after.policy)
+    reason := sprintf(
+        "Policy %s not allowed.", 
+        [p.change.after.name])
 }
 
 # Part with cidr_blocks works as it should
