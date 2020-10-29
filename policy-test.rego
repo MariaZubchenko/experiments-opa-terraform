@@ -6,9 +6,9 @@ array_contains(arr, elem) {
   arr[_] = elem
 }
 
-# Part wiht sse in the process of testing. Not working yet, but I have ideas 
+# Part with sse in the process of testing. Not working yet, but I have ideas 
 allowed_AES256_kms_master_key_id = ""
-denied_kms_master_key_id = "1"
+denied_kms_master_key_id = ""
 
 s3_buckets[r] {
     r := input.resource_changes[_]
