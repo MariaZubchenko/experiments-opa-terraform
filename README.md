@@ -91,5 +91,5 @@ For check this:
 or
 `$ opa eval --format pretty --data test-sse.rego --data base.rego --input test.json "data.terraform"`
 
-### policy-test.rego is for demo, how work policy with terraform plan.
+### policy-test.rego is for demo, how work opa policy with terraform plan.
 `$ opa eval --format pretty --data policy-test.rego --input test.json "data.terraform"`
