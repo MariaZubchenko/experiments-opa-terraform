@@ -87,7 +87,9 @@ so you will get:
 ### What about base.rego, test-sse.rego, test-iam.rego:
 These are not working policies as they should be.
 For check this:
-`$ opa eval --format pretty --data test-iam.rego --data base.rego --input testt.json "data.terraform"`
+`$ opa eval --format pretty --data test-iam.rego --data base.rego --input test.json "data.terraform"`
 or
-`$ opa eval --format pretty --data test-sse.rego --data base.rego --input testt.json "data.terraform"`
+`$ opa eval --format pretty --data test-sse.rego --data base.rego --input test.json "data.terraform"`
 
+### policy-test.rego is for demo, how work policy with terraform plan.
+`$ opa eval --format pretty --data policy-test.rego --input test.json "data.terraform"`
