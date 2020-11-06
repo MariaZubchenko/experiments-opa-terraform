@@ -1,20 +1,20 @@
 package base
 
 resource_types = {rt |
-  r = input.resources[_]
+  r = input.resource_changes[_]
   rt = r._type
 }
 
 resources_by_type = {rt: rs |
   resource_types[rt]
   rs = {ri: r |
-    r = input.resources[ri]
+    r = input.resource_changes[ri]
     r._type == rt
   }
 }
 
 plan = ret {
-  ret = input._plan
+  ret = input #._plan
 }
 
 resources(rt) = ret {
